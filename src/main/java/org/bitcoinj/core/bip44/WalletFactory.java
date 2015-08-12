@@ -23,6 +23,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ *
+ * WalletFactory.java : singleton class for creating/restoring/reading BIP44 HD wallet
+ *
+ * BIP44 extension of Bitcoinj
+ *
+ */
 public class WalletFactory {
 
     public static final String BIP39_ENGLISH_SHA256 = "ad90bf3beb7b0eb7e5acd74727dc0da96e0a280a258354e7293fb7e211ac03db";
@@ -38,6 +45,12 @@ public class WalletFactory {
 
     private WalletFactory()	{ ; }
 
+    /**
+     * Return instance for a full wallet including seed and private keys.
+     *
+     * @return WalletFactory
+     *
+     */
     public static WalletFactory getInstance() {
 
         if (instance == null) {
@@ -53,6 +66,12 @@ public class WalletFactory {
         strJSONFilePath = path;
 	}
 
+    /**
+     * Set Locale. Defaults to 'en_US'
+     *
+     * @param  Locale locale to be used.
+     *
+     */
 	public void setLocale(Locale loc)	{
 		if(loc != null)	{
 	        locale = loc;
@@ -62,6 +81,16 @@ public class WalletFactory {
 		}
 	}
 
+    /**
+     * Create new wallet.
+     *
+     * @param  int nbWords number of words in menmonic
+     * @param  String passphrase optional BIP39 passphrase
+     * @param  int nbAccounts create this number of accounts
+     *
+     * @return Wallet
+     *
+     */
     public Wallet newWallet(int nbWords, String passphrase, int nbAccounts) throws IOException, MnemonicException.MnemonicLengthException   {
 
         Wallet hdw = null;
@@ -100,6 +129,16 @@ public class WalletFactory {
         return hdw;
     }
 
+    /**
+     * Restore wallet.
+     *
+     * @param  String data: either BIP39 mnemonic or hex seed
+     * @param  String passphrase optional BIP39 passphrase
+     * @param  int nbAccounts create this number of accounts
+     *
+     * @return Wallet
+     *
+     */
     public Wallet restoreWallet(String data, String passphrase, int nbAccounts) throws AddressFormatException, IOException, DecoderException, MnemonicException.MnemonicLengthException, MnemonicException.MnemonicWordException, MnemonicException.MnemonicChecksumException  {
 
         Wallet hdw = null;
@@ -133,7 +172,6 @@ public class WalletFactory {
                 hdw = new Wallet(mc, params, seed, passphrase, nbAccounts);
             }
             else {
-//                data = data.replaceAll("[^a-z]+", " ");
                 words = Arrays.asList(data.trim().split("\\s+"));
                 seed = mc.toEntropy(words);
                 hdw = new Wallet(mc, params, seed, passphrase, nbAccounts);
@@ -153,6 +191,12 @@ public class WalletFactory {
         return hdw;
     }
 
+    /**
+     * Get wallet for this instance.
+     *
+     * @return Wallet
+     *
+     */
     public Wallet get() throws IOException, MnemonicException.MnemonicLengthException {
 
         if(wallets.size() < 1) {
@@ -163,6 +207,12 @@ public class WalletFactory {
         return wallets.get(0);
     }
 
+    /**
+     * Set wallet for this instance.
+     *
+     * @param  Wallet wallet
+     *
+     */
     public void set(Wallet wallet)	{
 
         if(wallet != null)	{

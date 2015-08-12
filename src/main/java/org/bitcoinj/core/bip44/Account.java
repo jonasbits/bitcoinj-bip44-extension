@@ -14,6 +14,11 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * Account.java : an account in a BIP44 wallet
+ *
+ */
 public class Account {
 
     private DeterministicKey aKey = null;
@@ -27,7 +32,15 @@ public class Account {
 
     private Account() { ; }
 
-    public Account(NetworkParameters params, DeterministicKey mKey, int child) {
+    /**
+     * Constructor for account.
+     *
+     * @param NetworkParameters params
+     * @param DeterministicKey mwey deterministic key for this account
+     * @param int child id within the wallet for this account
+     *
+     */
+    public Account(NetworkParameters params, DeterministicKey wKey, int child) {
 
         this.params = params;
         aID = child;
@@ -35,7 +48,7 @@ public class Account {
         // L0PRV & STDVx: private derivation.
         int childnum = child;
         childnum |= ChildNumber.HARDENED_BIT;
-        aKey = HDKeyDerivation.deriveChildKey(mKey, childnum);
+        aKey = HDKeyDerivation.deriveChildKey(wKey, childnum);
 
         strXPUB = aKey.serializePubB58(params);
 
@@ -47,6 +60,14 @@ public class Account {
 
     }
 
+    /**
+     * Constructor for watch-only account.
+     *
+     * @param NetworkParameters params
+     * @param String xpub XPUB for this account
+     * @param int child id within the wallet for this account
+     *
+     */
     public Account(NetworkParameters params, String xpub, int child) throws AddressFormatException {
 
         this.params = params;
@@ -63,6 +84,12 @@ public class Account {
 
     }
 
+    /**
+     * Restore watch-only account deterministic public key from XPUB.
+     *
+     * @return DeterministicKey
+     *
+     */
     private DeterministicKey createMasterPubKeyFromXPub(String xpubstr) throws AddressFormatException {
 
         byte[] xpubBytes = Base58.decodeChecked(xpubstr);
@@ -86,12 +113,24 @@ public class Account {
         return HDKeyDerivation.createMasterPubKeyFromBytes(pub, chain);
     }
 
+    /**
+     * Return XPUB string for this account.
+     *
+     * @return String
+     *
+     */
     public String xpubstr() {
 
         return strXPUB;
 
     }
 
+    /**
+     * Return xprv string for this account.
+     *
+     * @return String
+     *
+     */
     public String xprvstr() {
 
         if(aKey.hasPrivKey()) {
@@ -103,18 +142,42 @@ public class Account {
 
     }
 
+    /**
+     * Return id for this account.
+     *
+     * @return int
+     *
+     */
     public int getId() {
         return aID;
     }
 
+    /**
+     * Return receive chain this account.
+     *
+     * @return HD_Chain
+     *
+     */
     public Chain getReceive() {
         return chains.get(0);
     }
 
+    /**
+     * Return change chain this account.
+     *
+     * @return HD_Chain
+     *
+     */
     public Chain getChange() {
         return chains.get(1);
     }
 
+    /**
+     * Return chain for this account as indicated by index: 0 = receive, 1 = change.
+     *
+     * @return HD_Chain
+     *
+     */
     public Chain getChain(int idx) {
 
         if(idx < 0 || idx > 1)  {
@@ -123,7 +186,24 @@ public class Account {
 
         return chains.get(idx);
     }
+	
+    /**
+     * Return BIP44 path for this account (m / purpose' / coin_type' / account').
+     *
+     * @return String
+     *
+     */
+    public String getPath() {
+        return strPath;
+    }
 
+    /**
+     * Write account to JSONObject.
+     * For debugging only.
+     *
+     * @return JSONObject
+     *
+     */
     public JSONObject toJSON() {
         try {
             JSONObject obj = new JSONObject();
@@ -139,7 +219,7 @@ public class Account {
             }
             obj.put("chains", _chains);
 
-            obj.put("path", strPath);
+            obj.put("path", getPath());
 
             return obj;
         }

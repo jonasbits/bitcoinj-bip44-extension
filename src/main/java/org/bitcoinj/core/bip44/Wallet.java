@@ -19,6 +19,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * Wallet.java : BIP44 wallet
+ *
+ */
 public class Wallet {
 
     private byte[] seed = null;
@@ -36,6 +41,16 @@ public class Wallet {
 
     private Wallet() { ; }
 
+    /**
+     * Constructor for wallet.
+     *
+     * @param MnemonicCode mc mnemonic code object
+     * @param NetworkParameters params
+     * @param byte[] seed seed for this wallet
+     * @param String passphrase optional BIP39 passphrase
+     * @param int nbAccounts number of accounts to create
+     *
+     */
     public Wallet(MnemonicCode mc, NetworkParameters params, byte[] seed, String passphrase, int nbAccounts) throws MnemonicException.MnemonicLengthException {
 
         this.params = params;
@@ -84,8 +99,12 @@ public class Wallet {
         strPath = dKey.getPathAsString();
     }
 
-    /*
-    create from account xpub key(s)
+    /**
+     * Constructor for watch-only wallet initialized from submitted XPUB(s).
+     *
+     * @param NetworkParameters params
+     * @param String[] xpub array of XPUB strings
+     *
      */
     public Wallet(NetworkParameters params, String[] xpub) throws AddressFormatException {
 
@@ -98,45 +117,93 @@ public class Wallet {
 
     }
 
+    /**
+     * Return wallet seed as byte array.
+     *
+     * @return byte[]
+     *
+     */
     public byte[] getSeed() {
         return seed;
     }
 
+    /**
+     * Return wallet seed as hex string.
+     *
+     * @return String
+     *
+     */
     public String getSeedHex() {
         return Hex.encodeHexString(seed);
     }
 
+    /**
+     * Return wallet BIP39 mnemonic as string containing space separated words.
+     *
+     * @return String
+     *
+     */
     public String getMnemonic() {
         return Joiner.on(" ").join(wordList);
     }
 
+    /**
+     * Return wallet BIP39 passphrase.
+     *
+     * @return String
+     *
+     */
     public String getPassphrase() {
         return strPassphrase;
     }
 
+    /**
+     * Return accounts for this wallet.
+     *
+     * @return List<Account>
+     *
+     */
     public List<Account> getAccounts() {
         return accounts;
     }
 
+    /**
+     * Return account for submitted account id.
+     *
+     * @param int accountId
+     *
+     * @return Account
+     *
+     */
     public Account getAccount(int accountId) {
         return accounts.get(accountId);
     }
 
+    /**
+     * Add new account.
+     *
+     */
     public void addAccount() {
         accounts.add(new Account(params, dkRoot, accounts.size()));
     }
-
-    public void addAccount(String label) {
-
-        if(label == null) {
-            addAccount();
-        }
-        else {
-            accounts.add(new Account(params, dkRoot, accounts.size()));
-        }
-
+	
+    /**
+     * Return BIP44 path for this wallet (m / purpose').
+     *
+     * @return String
+     *
+     */
+    public String getPath() {
+        return strPath;
     }
 
+    /**
+     * Write entire wallet to JSONObject.
+     * For debugging only.
+     *
+     * @return JSONObject
+     *
+     */
     public JSONObject toJSON() {
         try {
             JSONObject obj = new JSONObject();
@@ -158,7 +225,7 @@ public class Wallet {
             }
             obj.put("accounts", accts);
 
-            obj.put("path", strPath);
+            obj.put("path", getPath());
 
             return obj;
         }

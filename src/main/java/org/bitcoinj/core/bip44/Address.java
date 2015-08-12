@@ -12,6 +12,11 @@ import org.json.JSONObject;
 
 import java.math.BigInteger;
 
+/**
+ *
+ * Address.java : an address in a BIP44 wallet account chain
+ *
+ */
 public class Address {
 
     private int childNum;
@@ -24,6 +29,14 @@ public class Address {
 
     private Address() { ; }
 
+    /**
+     * Constructor an HD address.
+     *
+     * @param NetworkParameters params
+     * @param DeterministicKey cKey deterministic key for this address
+     * @param int child index of this address in its chain
+     *
+     */
     public Address(NetworkParameters params, DeterministicKey cKey, int child) {
 
         this.params = params;
@@ -48,22 +61,42 @@ public class Address {
         strPath = dk.getPathAsString();
     }
 
+    /**
+     * Get pubKey as byte array.
+     *
+     * @return byte[]
+     *
+     */
     public byte[] getPubKey() {
         return pubKey;
     }
 
+    /**
+     * Get pubKeyHash as byte array.
+     *
+     * @return byte[]
+     *
+     */
     public byte[] getPubKeyHash() {
         return pubKeyHash;
     }
 
-    public String getPath() {
-        return strPath;
-    }
-
+    /**
+     * Return public address for this instance.
+     *
+     * @return String
+     *
+     */
     public String getAddressString() {
         return ecKey.toAddress(params).toString();
     }
 
+    /**
+     * Return private key for this address (compressed WIF format).
+     *
+     * @return String
+     *
+     */
     public String getPrivateKeyString() {
 
         if(ecKey.hasPrivKey()) {
@@ -75,10 +108,33 @@ public class Address {
 
     }
 
+    /**
+     * Return Bitcoinj address instance for this Address.
+     *
+     * @return org.bitcoinj.core.Address
+     *
+     */
     public org.bitcoinj.core.Address getAddress() {
         return ecKey.toAddress(params);
     }
 
+    /**
+     * Return BIP44 path for this address (m / purpose' / coin_type' / account' / chain / address_index).
+     *
+     * @return String
+     *
+     */
+    public String getPath() {
+        return strPath;
+    }
+
+    /**
+     * Write address to JSONObject.
+     * For debugging only.
+     *
+     * @return JSONObject
+     *
+     */
     public JSONObject toJSON() {
         try {
             JSONObject obj = new JSONObject();
@@ -88,7 +144,7 @@ public class Address {
                 obj.put("key", getPrivateKeyString());
             }
 
-            obj.put("path", strPath);
+            obj.put("path", getPath());
 
             return obj;
         }

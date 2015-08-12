@@ -7,6 +7,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ *
+ * Chain.java : a chain in a BIP44 wallet account
+ *
+ */
 public class Chain {
 
     private DeterministicKey cKey = null;
@@ -21,6 +26,14 @@ public class Chain {
 
     private Chain() { ; }
 
+    /**
+     * Constructor for a chain.
+     *
+     * @param NetworkParameters params
+     * @param DeterministicKey aKey deterministic key for this chain
+     * @param boolean isReceive this is the receive chain
+     *
+     */
     public Chain(NetworkParameters params, DeterministicKey aKey, boolean isReceive) {
 
         this.params = params;
@@ -31,23 +44,47 @@ public class Chain {
         strPath = cKey.getPathAsString();
     }
 
-    public static int maxSafeExtend() {
-        return DESIRED_MARGIN - ADDRESS_GAP_MAX;
-    }
-
+    /**
+     * Test if this is the receive chain.
+     *
+     * @return boolean
+     */
     public boolean isReceive() {
         return isReceive;
     }
 
+    /**
+     * Return Address at provided index into chain.
+     *
+     * @return Address
+	 *
+     */
     public Address getAddressAt(int addrIdx) {
         return new Address(params, cKey, addrIdx);
     }
 
+    /**
+     * Return BIP44 path for this chain (m / purpose' / coin_type' / account' / chain).
+     *
+     * @return String
+     *
+     */
+    public String getPath() {
+        return strPath;
+    }
+
+    /**
+     * Write chain to JSONObject.
+     * For debugging only.
+     *
+     * @return JSONObject
+     *
+     */
     public JSONObject toJSON() {
         try {
             JSONObject obj = new JSONObject();
 
-            obj.put("path", strPath);
+            obj.put("path", getPath());
 
             JSONArray addresses = new JSONArray();
             for(int i = 0; i < 2; i++) {
