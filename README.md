@@ -1,4 +1,4 @@
-# My-Wallet-HD-jar
+# Bitcoinj BIP44 extension
 
 BIP44 extension of Bitcoinj. Includes full support for BIP39 including non-English word lists.
 
