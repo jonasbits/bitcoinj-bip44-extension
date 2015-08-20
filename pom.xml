@@ -10,10 +10,10 @@
   <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-	  
+
   <build>
 		<finalName>BitcoinjBIP44</finalName>
-		
+
   		<!-- BIP39 word lists -->
 		<resources>
 		      <resource>
@@ -21,7 +21,7 @@
 		        <includes>
     		          <include>en_US.txt</include>
     		          <include>es_ES.txt</include>
-	  				  <include>fr_FR.txt</include>
+	  				      <include>fr_FR.txt</include>
 	  		          <include>jp_JP.txt</include>
 	  		          <include>zh_CN.txt</include>
 					  <include>zh_TW.txt</include>
@@ -41,7 +41,7 @@
 				<downloadJavadocs>false</downloadJavadocs>
 			</configuration>
 		  </plugin>
-			
+
 		  <!-- Set a compiler level -->
 		  <plugin>
 			<groupId>org.apache.maven.plugins</groupId>
@@ -102,7 +102,7 @@
     <dependency>
 	  <groupId>org.bitcoinj</groupId>
 	  <artifactId>bitcoinj-core</artifactId>
-	  <version>0.13.1</version>
+	  <version>0.13.2</version>
     </dependency>
     <dependency>
 	  <groupId>commons-cli</groupId>
