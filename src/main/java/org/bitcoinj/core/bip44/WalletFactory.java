@@ -14,7 +14,16 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.security.SecureRandom;
@@ -38,7 +47,7 @@ public class WalletFactory {
     private static List<Wallet> wallets = null;
 
     private static Logger mLogger = LoggerFactory.getLogger(WalletFactory.class);
-	
+
 	private static Locale locale = null;
 
     public static String strJSONFilePath = null;

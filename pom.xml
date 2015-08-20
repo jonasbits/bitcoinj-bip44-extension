@@ -14,7 +14,7 @@
   <build>
 		<finalName>BitcoinjBIP44</finalName>
 
-  		<!-- BIP39 word lists -->
+  	<!-- BIP39 word lists -->
 		<resources>
 		      <resource>
 		        <directory>src/wordlist</directory>
@@ -24,7 +24,7 @@
 	  				      <include>fr_FR.txt</include>
 	  		          <include>jp_JP.txt</include>
 	  		          <include>zh_CN.txt</include>
-					  <include>zh_TW.txt</include>
+					        <include>zh_TW.txt</include>
 		        </includes>
 		      </resource>
 	  	</resources>
