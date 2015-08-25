@@ -45,10 +45,11 @@ public class WalletFactory {
 
     private static WalletFactory instance = null;
     private static List<Wallet> wallets = null;
+    private static Wallet watch_only_wallet = null;
 
     private static Logger mLogger = LoggerFactory.getLogger(WalletFactory.class);
 
-	private static Locale locale = null;
+  	private static Locale locale = null;
 
     public static String strJSONFilePath = null;
 
@@ -63,9 +64,33 @@ public class WalletFactory {
     public static WalletFactory getInstance() {
 
         if (instance == null) {
-			locale = new Locale("en", "US");
+			      locale = new Locale("en", "US");
             wallets = new ArrayList<Wallet>();
             instance = new WalletFactory();
+        }
+
+        return instance;
+    }
+
+    /**
+     * Return instance for a watch only wallet. No seed, no private keys.
+     *
+     * @param  Context ctx app context
+     * @param  String[] xpub restore these accounts only
+     *
+     * @return WalletFactory
+     *
+     */
+    public static WalletFactory getInstance(String[] xpub) throws AddressFormatException {
+
+        if(instance == null) {
+            locale = new Locale("en", "US");
+            wallets = new ArrayList<Wallet>();
+            instance = new WalletFactory();
+        }
+
+        if(watch_only_wallet == null) {
+        	watch_only_wallet = new Wallet(MainNetParams.get(), xpub);
         }
 
         return instance;
@@ -229,6 +254,26 @@ public class WalletFactory {
             wallets.add(wallet);
         }
 
+    }
+
+    /**
+     * Return watch only wallet for this instance.
+     *
+     * @return Wallet
+     *
+     */
+    public Wallet getWatchOnlyWallet()   {
+    	return watch_only_wallet;
+    }
+
+    /**
+     * Set watch only wallet for this instance.
+     *
+     * @param  Wallet wallet
+     *
+     */
+    public void setWatchOnlyWallet(Wallet wallet)   {
+    	watch_only_wallet = wallet;
     }
 
     public void saveWalletToJSON(String password) throws MnemonicException.MnemonicLengthException, IOException, JSONException {
