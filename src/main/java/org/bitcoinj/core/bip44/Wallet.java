@@ -134,7 +134,7 @@ public class Wallet {
      *
      */
     public String getSeedHex() {
-        return Hex.encodeHexString(seed);
+        return new String(Hex.encodeHex(seed));
     }
 
     /**
@@ -186,7 +186,7 @@ public class Wallet {
     public void addAccount() {
         accounts.add(new Account(params, dkRoot, accounts.size()));
     }
-	
+
     /**
      * Return BIP44 path for this wallet (m / purpose').
      *
