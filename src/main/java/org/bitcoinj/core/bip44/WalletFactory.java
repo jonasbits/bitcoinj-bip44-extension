@@ -1,7 +1,5 @@
 package org.bitcoinj.core.bip44;
 
-import com.bip44.crypto.AESUtil;
-import com.bip44.util.CharSequenceX;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.bitcoinj.core.AddressFormatException;
@@ -31,6 +29,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+
+import info.blockchain.wallet.crypto.AESUtil;
+import info.blockchain.wallet.util.CharSequenceX;
 
 /**
  *
